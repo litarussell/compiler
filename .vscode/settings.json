@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.hdl": "verilog",
+    "stdio.h": "c",
+    "vm.h": "c",
+    "stdlib.h": "c",
+    "lexer.h": "c",
+    "type.h": "c",
+    "__config": "cpp",
+    "string.h": "c",
+    "memory.h": "c"
+  }
+}

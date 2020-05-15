@@ -1,4 +1,4 @@
-CC = clang
+# CC = clang
 OUT = ./out
 SRC = ./src
 TEST = ./test

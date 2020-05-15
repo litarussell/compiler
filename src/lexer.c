@@ -1,9 +1,12 @@
+/**
+ * 词法分析器 lexer
+ */
 #include <string.h>
 #include "lexer.h"
 
 void next () {
   char *last_pos;
-  INT hash;
+  int_ hash;
   while ((token = *src)) {
     ++src;
     if (token == '\n') {
@@ -40,9 +43,9 @@ void next () {
         current_id = current_id + IdSize;
       }
       
-      token = current_id[Token] = Id;   // 0
-      current_id[Hash] = hash;          // 1
-      current_id[Name] = (INT)last_pos; // 2
+      token = current_id[Token] = Id;    // 0
+      current_id[Hash] = hash;           // 1
+      current_id[Name] = (int_)last_pos; // 2
       return;
     }
     // 处理数字

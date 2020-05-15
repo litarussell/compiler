@@ -29,6 +29,19 @@
       "externalConsole": false,
       "MIMode": "lldb",
       "preLaunchTask": "build vm"
+    },
+    {
+      "name": "调试当前文件",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/${fileBasenameNoExtension}",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb",
+      "preLaunchTask": "build file"
     }
   ]
 }

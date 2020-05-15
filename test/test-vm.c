@@ -4,7 +4,7 @@
 #include "vm.h"
 
 int main (int argc, char **argv) {
-  int i, fd;
+  int_ i, fd;
 
   argc--;
   argv++;
@@ -34,7 +34,7 @@ int main (int argc, char **argv) {
   memset(data, 0, poolsize);
   memset(stack, 0, poolsize);
 
-  bp = sp = (INT *)((INT)stack + poolsize); // 将bp sp指向栈底
+  bp = sp = (int_ *)((int_)stack + poolsize); // 将bp sp指向栈底
   ax = 0;
 
   i = 0;

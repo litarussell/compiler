@@ -8,6 +8,7 @@
     "type.h": "c",
     "__config": "cpp",
     "string.h": "c",
-    "memory.h": "c"
+    "memory.h": "c",
+    "parser.h": "c"
   }
 }

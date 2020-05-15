@@ -2,20 +2,20 @@
 
 void next ();
 
-INT poolsize;
+int_ poolsize;
 
 char *src,
      *old_src;  // pointer to source code string;
 
-INT line;
+int_ line;
 
-INT token,        // current token
+int_ token,        // current token
     token_val;    // value of current token
 
-INT *current_id,  // current parsed ID
+int_ *current_id,  // current parsed ID
     *symbols;     // symbol table
 
-INT *idmain;      // the `main` function
+int_ *idmain;      // the `main` function
 
 // tokens and classes (operators last and in precedence order)
 enum {

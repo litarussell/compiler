@@ -1,1 +1,1 @@
-#define INT intptr_t
+#define int_ intptr_t

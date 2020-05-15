@@ -5,7 +5,7 @@
 #include "lexer.h"
 
 int main (int argc, char **argv) {
-  int i;
+  int_ i;
 
   argc--;
   argv++;
@@ -20,7 +20,7 @@ int main (int argc, char **argv) {
 
   memset(symbols, 0, poolsize);
 
-  src = "char else enum if int return sizeof while "
+  src = "char enum else if int_ return sizeof while "
         "void main";
   i = Char;
 

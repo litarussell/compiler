@@ -2,7 +2,7 @@
 
 int eval ();
 
-INT *pc,  // 程序计数器
+int_ *pc,  // 程序计数器
     *bp,  // 基址指针
     *sp,  // 栈顶指针
     ax;   // 通用寄存器
@@ -13,9 +13,9 @@ enum {
   OPEN, READ, CLOS, PRTF, MALC, MSET, MCMP, EXIT
 };
 
-INT poolsize; // default size of text/data/stack
+int_ poolsize; // default size of text/data/stack
 
-INT *text,      // text segment
+int_ *text,      // text segment
     *old_text,  // for dump text segment
     *stack;     // stack
 char *data;     // data segment

@@ -6,3 +6,4 @@ out/test-vm
 main.dSYM/*
 test/xc.c
 test/hello.c
+pl0/pl0

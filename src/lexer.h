@@ -1,30 +1,24 @@
-#include "type.h"
-
-void next ();
-
-int_ poolsize;
-
-char *src,
-     *old_src;  // pointer to source code string;
-
-int_ line;
-
-int_ token,        // current token
-    token_val;    // value of current token
-
-int_ *current_id,  // current parsed ID
-    *symbols;     // symbol table
-
-int_ *idmain;      // the `main` function
-
-// tokens and classes (operators last and in precedence order)
 enum {
-  Num = 128, Fun, Sys, Glo, Loc, Id,
-  Char, Else, Enum, If, Int, Return, Sizeof, While,
-  Assign, Cond, Lor, Lan, Or, Xor, And, Eq, Ne, Lt, Gt, Le, Ge, Shl, Shr, Add, Sub, Mul, Div, Mod, Inc, Dec, Brak
+  TOK_NUMBER, TOK_STRING, TOK_FALSE, TOK_TRUE,
+  TOK_MUL_ASSIGN, TOK_DIV_ASSIGN, TOK_MOD_ASSIGN, TOK_PLUS_ASSIGN, TOK_MINUS_ASSIGN,
+  TOK_SHL_ASSIGN, TOK_SAR_ASSIGN, TOK_SHR_ASSIGN, TOK_AND_ASSIGN, TOK_XOR_ASSIGN, TOK_OR_ASSIGN,
+  TOK_IF, TOK_ELSE, TOK_SWITCH, TOK_CASE, TOK_DEFAULT,
+  TOK_WHILE, TOK_FOR, TOK_BREAK, TOK_CONTINUE,
+  TOK_TRY, TOK_CATCH, // try catch关键字
+  TOK_IDENT, // 标识符
+  TOK_NULL,
+  TOK_RETURN,
+  TOK_VOID,
+  TOK_IMPORT,
 };
 
-// fields of identifier
-enum {Token, Hash, Name, Type, Class, Value, BType, BClass, BValue, IdSize};
+typedef struct Token {
+  int tok;
+  char buf[20];
+  char *str;
+  int len;
+  int size;
+  int line_num;
+};
 
-
+int next_token ();

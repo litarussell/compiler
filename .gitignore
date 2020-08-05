@@ -7,3 +7,6 @@ main.dSYM/*
 test/xc.c
 test/hello.c
 pl0/pl0
+pl0/test.pl0
+pl0/*.tmp
+hack/as/out/*

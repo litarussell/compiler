@@ -16,6 +16,14 @@
     },
     {
       "type": "shell",
+      "label": "build hack_as",
+      "command": "make as -C ./hack/",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "type": "shell",
       "label": "build lexer",
       "command": "make test-lexer",
       "options": {

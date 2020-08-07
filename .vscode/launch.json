@@ -4,7 +4,32 @@
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-  
+    {
+      "name": "调试当前文件",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/${fileBasenameNoExtension}",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb",
+      "preLaunchTask": "build file"
+    },
+    {
+      "name": "调试hack_as",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/hack/as/out/as",
+      "args": ["./hack/as/test/Add.asm"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb",
+      "preLaunchTask": "build hack_as"
+    },
     {
       "name": "调试lexer",
       "type": "cppdbg",
@@ -31,18 +56,5 @@
       "MIMode": "lldb",
       "preLaunchTask": "build vm"
     },
-    {
-      "name": "调试当前文件",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/out/${fileBasenameNoExtension}",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "lldb",
-      "preLaunchTask": "build file"
-    }
   ]
 }

@@ -5,9 +5,10 @@
 
 #include "as.h"
 
-#define maxsym 10  /* 符号的最大长度 */
+
 #define getch if(-1 == get_ch()) return -1;
 #define nextline if(-1 == next_line()) return -1;
+
 
 typedef enum COMMOND_TYPE {
   A_COMMOND,
@@ -19,12 +20,14 @@ typedef enum COMMOND_TYPE {
 int sym;
 c_type sym_type;
 
+int code;       // 从A指令中提取的符号地址、或者立即数
+
 char ch = ' ';  // 获取字符的缓冲区
 char line[81];  // 读取行缓冲区
 FILE* fin;      // 
 
 char tmp[maxsym + 1]; // 临时符号, 多出的一个字节用于存放0
-char id[maxsym+1];    // 当前变量符号
+char id[maxsym + 1];    // 当前变量符号
 
 int i = 0;
 int j = 0;
@@ -33,46 +36,10 @@ int j = 0;
 // 或提取 (xxx) 中的xxx
 int symbol(c_type type) {
   getch;
-  if (type == A_COMMOND) {
-    // 符号
-    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-      int k = 0;
-      do {
-        if (k < maxsym) {
-          tmp[k++] = ch;
-        }
-        getch;
-      } while ((ch >= 'a' && ch <= 'z') || (ch>='0' && ch<='9')
-              || (ch >= 'A' && ch <= 'Z'));
-      tmp[k] = 0;
-      strcpy(id, tmp);
-      if (contains(id)) { // 当前符号在符号表中存在
-        // 获取符号指示的地址
-        get_address(id);
-      }
-      else { // 创建符号
-        add_entry(id);
-      }
-      return 1;
-    }
-    
-    // 立即数
-    if (ch >= '0' && ch <= '9') {
-      int k = 0;
-      int num = 0;
-      do { // 拼接数字
-        num = num * 10 + ch - '0';
-        k++;
-        getch;
-      } while ((ch >= 'a' && ch <= 'z') || (ch>='0' && ch<='9')
-              || (ch >= 'A' && ch <= 'Z'));
-      k--;
-      if (k > maxsym) {
+  if (type == A_COMMOND) { // a指令符号
 
-      }
-    }
   }
-  else if (type == L_COMMOND) {
+  else if (type == L_COMMOND) { // 
 
   }
 }
@@ -135,30 +102,78 @@ int get_token() {
   }
 
   if (ch == '@') { // A指令
-    sym_type = A_COMMOND;
-    symbol(A_COMMOND);
+    getch;
+    // 符号
+    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+      int k = 0;
+      do {
+        if (k < maxsym) {
+          tmp[k++] = ch;
+        }
+        getch;
+      } while ((ch >= 'a' && ch <= 'z') || (ch>='0' && ch<='9')
+              || (ch >= 'A' && ch <= 'Z'));
+      tmp[k] = 0;
+      strcpy(id, tmp);
+      // 搜索符号地址
+      int addr = get_address(id);
+      
+      if (addr == -1) {
+        code = add_entry(id);   // 创建符号
+      } else {
+        code = addr;
+      }
+      sym_type = A_COMMOND;
+
+      return 0;
+    }
+
+    // 立即数
+    if (ch >= '0' && ch <= '9') {
+      int k = 0;
+      int num = 0;
+      do { // 拼接数字
+        num = num * 10 + ch - '0';
+        k++;
+        getch;
+      } while ((ch >= 'a' && ch <= 'z') || (ch>='0' && ch<='9')
+              || (ch >= 'A' && ch <= 'Z'));
+      k--;
+      if (k > maxsym) {
+        return -1;
+      }
+      code = num;
+      sym_type = A_COMMOND;
+    }
+    // symbol(A_COMMOND);
   }
   else {
-    if (ch == '(') {  // 标签
+    if (ch == '(') {  // 伪命令标签
       sym_type = L_COMMOND;
-      symbol(L_COMMOND);
     }
     else { // C指令
       sym_type = C_COMMOND;
-      d_token d = dest_token();
-      c_token c = comp_token();
-      j_token j = jump_token();
     }
   }
 
   return 0;
 }
 
-void parser(FILE* fp) {
-  fin = fp;
+void parser() {
   while (get_token() != -1) {
     printf("%u", sym_type);
 
+    if (sym_type == A_COMMOND) {  // 处理A指令
+      printf("%d\n", code);
+    }
+    else if (sym_type == L_COMMOND) {  // 处理伪命令
+      int code = symbol(L_COMMOND);
+    }
+    else if (sym_type == C_COMMOND) {  // 处理C指令
+      d_token d = dest_token();
+      c_token c = comp_token();
+      j_token j = jump_token();
+    }
   }
-  fclose(fp);
+  fclose(fin);
 }

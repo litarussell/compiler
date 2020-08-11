@@ -7,13 +7,11 @@ int main(int argc, char **argv) {
 
   char* filename = argv[1];
 
-  FILE* fp = fopen(filename, "r");
-  if (!fp)
+  fin = fopen(filename, "r");
+  if (!fin)
     printf("cannot open %s: %s", filename, strerror(errno));
 
-  parser(fp);
-
-  printf("%d:\n", '\n');
+  parser();
 
   return 0;
 }

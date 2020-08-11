@@ -6,9 +6,11 @@
 #include <string.h>
 #include <stdbool.h>
 
-void parser(FILE*);
+#define maxsym 10  // 符号的最大长度
 
-bool contains(char*);
+FILE* fin;
+
+void parser();
 
 int add_entry(char*);
 
@@ -69,13 +71,3 @@ typedef enum JUMP_TOKEN {
   T_JLE,
   T_JMP
 } j_token;
-
-/**
- *  预定义符号
- */
-enum SYMBOLS {
-  SP, LCL, ARG, THIS, THAT,
-  R0, R1, R2, R3, R4, R5, R6, R7, R8, R9,
-  R10, R11, R12, R13, R14, R15,
-  SCREEN, KBD
-};

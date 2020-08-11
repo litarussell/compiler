@@ -59,12 +59,15 @@ static int position(char* id) {
 
 /* ------------------------------- 供外部调用 ------------------------------- */
 // 添加 符号-地址 到符号表中
-int add_entry(char* id) {
+int add_entry(char* id, int addr) {
   if (ptx >= txmax) return -1;
-
   strcpy(table[ptx].name, id);
-  table[ptx++].adr = ram_address++;
-  return ram_address - 1;
+  if (addr == -1) {
+    table[ptx++].adr = ram_address++;
+    return ram_address - 1;
+  }
+  table[ptx++].adr = addr;
+  return addr;
 }
 
 // 返回指定符号的地址

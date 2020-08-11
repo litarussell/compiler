@@ -9,7 +9,6 @@
 #define getch if(-1 == get_ch()) return -1;
 #define nextline if(-1 == next_line()) return -1;
 
-
 typedef enum COMMOND_TYPE {
   A_COMMOND,
   C_COMMOND,
@@ -17,20 +16,19 @@ typedef enum COMMOND_TYPE {
   NOTE,
 } c_type;
 
+char tmp[maxsym + 1]; // 临时符号, 多出的一个字节用于存放0
+char id[maxsym + 1];  // 当前变量符号
+
 int sym;
 c_type sym_type;
-
-int code;       // 从A指令中提取的符号地址、或者立即数
-
-char ch = ' ';  // 获取字符的缓冲区
-char line[81];  // 读取行缓冲区
-FILE* fin;      // 
-
-char tmp[maxsym + 1]; // 临时符号, 多出的一个字节用于存放0
-char id[maxsym + 1];    // 当前变量符号
+int code;         // 从A指令中提取的符号地址、或者立即数
+char ch = ' ';    // 获取字符的缓冲区
+char line[81];    // 读取行缓冲区
+FILE* fin;        // 
 
 int i = 0;
 int j = 0;
+int pc = -1;      // 程序计数器 每遇到A或C指令+1
 
 // 提取@xxx
 // 或提取 (xxx) 中的xxx
@@ -119,12 +117,12 @@ int get_token() {
       int addr = get_address(id);
       
       if (addr == -1) {
-        code = add_entry(id);   // 创建符号
+        code = add_entry(id, -1);   // 创建符号
       } else {
         code = addr;
       }
       sym_type = A_COMMOND;
-
+      pc++;
       return 0;
     }
 
@@ -144,14 +142,37 @@ int get_token() {
       }
       code = num;
       sym_type = A_COMMOND;
+      pc++;
+      return 0;
     }
-    // symbol(A_COMMOND);
   }
   else {
     if (ch == '(') {  // 伪命令标签
+      getch;
+      if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+        int k = 0;
+        do {
+          if (k < maxsym) {
+            tmp[k++] = ch;
+          }
+          getch;
+        } while ((ch >= 'a' && ch <= 'z') || (ch>='0' && ch<='9')
+                || (ch >= 'A' && ch <= 'Z'));
+        tmp[k] = 0;
+
+        if (ch != ')') {
+          return -1;
+        }
+
+        strcpy(id, tmp);
+
+        add_entry(id);
+      }
+
       sym_type = L_COMMOND;
     }
     else { // C指令
+      pc++;
       sym_type = C_COMMOND;
     }
   }

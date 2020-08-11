@@ -12,7 +12,7 @@ FILE* fin;
 
 void parser();
 
-int add_entry(char*);
+int add_entry(char*, int);
 
 int get_address(char*);
 

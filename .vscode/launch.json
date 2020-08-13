@@ -22,7 +22,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/hack/as/out/as",
-      "args": ["./hack/as/test/Add.asm"],
+      "args": ["./hack/as/test/mult.asm"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],

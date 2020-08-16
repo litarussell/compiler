@@ -13,7 +13,7 @@ CCFLAGS = -c -o3
 BUILDFLAG = -o
 endif
 
-as: $(AS_OUT)/main.o $(AS_OUT)/parser.o
+as: $(AS_OUT)/main.o $(AS_OUT)/parser.o $(AS_OUT)/symbol_table.o
 	${CC} $(BUILDFLAG) $(AS_OUT)/$@ $^
 
 $(AS_OUT)/%.o: $(AS)/%.c

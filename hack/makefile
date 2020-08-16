@@ -1,3 +1,5 @@
+CC = clang
+
 AS_SRC = ./as
 AS_OUT = ${AS_SRC}/out
 AS_TEST = ${AS_SRC}/test

@@ -10,3 +10,5 @@ pl0/pl0
 pl0/test.pl0
 pl0/*.tmp
 hack/as/out/*
+node_modules
+package-lock.json

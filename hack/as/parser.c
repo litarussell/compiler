@@ -4,9 +4,9 @@
  */
 
 #include "as.h"
+#include "parser.h"
 
-
-#define getch if(-1 == get_ch()) return -1;
+#define getch if(get_ch() == -1) return -1;
 #define nextline if(-1 == next_line()) return -1;
 
 /**
@@ -74,7 +74,6 @@ typedef enum COMMOND_TYPE {
 } c_type;
 
 
-
 FILE* fin;            // 
 int  num;             // 立即数
 int  code;            // 从A指令中提取的符号地址、或者立即数
@@ -91,70 +90,210 @@ int j = 0;
 
 // 提取@xxx
 // 或提取 (xxx) 中的xxx
-int symbol(c_type type) {
-  getch;
-  if (type == A_COMMOND_ID) { // a指令符号
+// int symbol(c_type type) {
+//   // getch;
+//   if (type == A_COMMOND_ID) { // a指令符号
 
-  }
-  else if (type == L_COMMOND) { // 
+//   }
+//   else if (type == L_COMMOND) { // 
 
-  }
-}
+//   }
+// }
 
 // 处理当前C指令的dest助记符
 d_token dest_token() {
+  d_token td = TD_NULL;
   if (ch == 'A') {
     getch;
     if (ch == 'M') {
       getch;
-      if (ch == 'D') {
-        getch;
-        return TD_AMD;
+      if (ch == 'D') td = TD_AMD;
+      else {
+        back_ch();
+        td = TD_AM;
       }
-      return TD_AM;
     }
-    else if (ch == 'D') {
-      getch;
-      return TD_AD;
+    else if (ch == 'D') td = TD_AD;
+    else {
+      back_ch();
+      td = TD_A;
     }
-    return TD_A;
   }
   else if (ch == 'M') {
     getch;
-    if (ch == 'D') {
-      getch;
-      return TD_MD;
+    if (ch == 'D') td = TD_MD;
+    else {
+      back_ch();
+      td = TD_M;
     }
-    return TD_M;
   }
-  else if (ch == 'D') {
-    getch;
-    return TD_D;
+  else if (ch == 'D') td = TD_D;
+
+  getch;
+  if (ch != '=') {
+    back_ch(0);
   }
-  else {
-    return TD_NULL;
-  }
+  return td;
 }
 
 // 处理当前C指令的comp助记符
 c_token comp_token() {
-  bool MINUS_FLAG = false;
-  bool NOT_FLAG = false;
-  if (ch == '-') MINUS_FLAG = true;
-  else if (ch == '!') NOT_FLAG = true;
-  getch;
-  if (ch == 'A') {
+  if (ch == '=') getch;
+  
+  if (ch == '-') {
     getch;
-    if (ch == 'A') {
-
+    switch (ch) {
+      case '1':
+        getch;
+        return TC_MINUS_ONE;
+      case 'A':
+        getch;
+        return TC_MINUS_A;
+      case 'D':
+        getch;
+        return TC_MINUS_D;
+      case 'M':
+        getch;
+        return TC_MINUS_M;
     }
+    return -1;
   }
-  else if (ch == 'D') {
 
+  if (ch == '!') {
+    getch;
+    switch (ch) {
+      case 'A':
+        getch;
+        return TC_NOT_A;
+      case 'D':
+        getch;
+        return TC_NOT_D;
+      case 'M':
+        getch;
+        return TC_NOT_M;
+    }
+    return -1;
+  }
+
+  if (ch == '0') {
+    getch;
+    return TC_ZERO;
+  }
+  if (ch == '1') {
+    getch;
+    return TC_ONE;
+  }
+  
+  if (ch == 'D') {
+    getch;
+    if (ch == '+') {
+      getch;
+      if (ch == '1') {
+        getch;
+        return TC_D_ADD_ONE;
+      }
+      else if (ch == 'A') {
+        getch;
+        return TC_D_ADD_A;
+      }
+      else if (ch == 'M') {
+        getch;
+        return TC_D_ADD_M;
+      }
+      back_ch();
+    }
+    else if (ch == '-') {
+      getch;
+      if (ch == '1') {
+        getch;
+        return TC_D_MINUS_ONE;
+      }
+      else if (ch == 'A') {
+        getch;
+        return TC_D_MINUS_A;
+      }
+      else if (ch == 'M') {
+        getch;
+        return TC_D_MINUS_M;
+      }
+      back_ch();
+    }
+    else if (ch == '&') {
+      getch;
+      if (ch == 'A') {
+        getch;
+        return TC_D_AND_A;
+      }
+      else if (ch == 'M') {
+        getch;
+        return TC_D_AND_M;
+      }
+      back_ch();
+    }
+    else if (ch == '|') {
+      getch;
+      if (ch == 'A') {
+        getch;
+        return TC_D_OR_A;
+      }
+      else if (ch == 'M') {
+        getch;
+        return TC_D_OR_M;
+      }
+      back_ch();
+    }
+    back_ch();
+    return TC_D;
+  }
+  else if (ch == 'A') {
+    getch;
+    if (ch == '+') {
+      getch;
+      if (ch == '1') {
+        getch;
+        return TC_A_ADD_ONE;
+      }
+      back_ch();
+    }
+    else if (ch == '-') {
+      getch;
+      if (ch == 'D') {
+        getch;
+        return TC_A_MINUS_D;
+      }
+      back_ch();
+    }
+    back_ch();
+    return TC_A;
   }
   else if (ch == 'M') {
-
+    getch;
+    if (ch == '+') {
+      getch;
+      if (ch == '1') {
+        getch;
+        return TC_M_ADD_ONE;
+      }
+      back_ch();
+    }
+    else if (ch == '-') {
+      getch;
+      if (ch == '1') {
+        getch;
+        return TC_M_MINUS_ONE;
+      }
+      else if (ch == 'D') {
+        getch;
+        return TC_M_MINUS_D;
+      }
+      back_ch();
+    }
+    back_ch();
+    return TC_M;
   }
+
+  back_ch();
+  return -1;
 }
 
 // 处理当前C指令的jump助记符
@@ -187,6 +326,12 @@ int get_ch() {
   }
   ch = line[j++];
   return 0;
+}
+
+// 回溯
+void back_ch(int n) {
+  if (n == 0) j = 0;
+  else if (j > 0) j--;
 }
 
 // 获取下一个token
@@ -284,13 +429,13 @@ void parser() {
 
     if (sym_type == A_COMMOND_ID) {  // 处理A指令-符号
       // 搜索符号地址
-      int addr = get_address(id);
+      // int addr = get_address(id);
       
-      if (addr == -1) {
-        code = add_entry(id, -1);   // 创建符号
-      } else {
-        code = addr;
-      }
+      // if (addr == -1) {
+      //   code = add_entry(id, -1);   // 创建符号
+      // } else {
+      //   code = addr;
+      // }
       printf("%d\n", code);
       pc++;
     }

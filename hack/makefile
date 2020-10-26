@@ -6,14 +6,15 @@ AS_TEST = ${AS_SRC}/test
 
 mode = debug
 ifeq ($(mode), debug)
-CCFLAGS = -g -c -o
+CCFLAGS = -std=c11 -g -c -o
 BUILDFLAG = -g -o
 else
-CCFLAGS = -c -o3
+CCFLAGS = -std=c11 -c -o3
 BUILDFLAG = -o
 endif
 
-as: $(AS_OUT)/main.o $(AS_OUT)/parser.o $(AS_OUT)/symbol_table.o
+# $(AS_OUT)/symbol_table.o
+as: $(AS_OUT)/main.o $(AS_OUT)/parser.o
 	${CC} $(BUILDFLAG) $(AS_OUT)/$@ $^
 
 $(AS_OUT)/%.o: $(AS)/%.c

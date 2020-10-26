@@ -6,6 +6,8 @@
 #include "as.h"
 #include "parser.h"
 
+#define backleft j--;
+#define backch if(j > 0) j--;
 #define getch if(get_ch() == -1) return -1;
 #define nextline if(-1 == next_line()) return -1;
 
@@ -109,13 +111,13 @@ d_token dest_token() {
       getch;
       if (ch == 'D') td = TD_AMD;
       else {
-        back_ch();
+        backch;
         td = TD_AM;
       }
     }
     else if (ch == 'D') td = TD_AD;
     else {
-      back_ch();
+      backch;
       td = TD_A;
     }
   }
@@ -123,7 +125,7 @@ d_token dest_token() {
     getch;
     if (ch == 'D') td = TD_MD;
     else {
-      back_ch();
+      backch;
       td = TD_M;
     }
   }
@@ -131,7 +133,7 @@ d_token dest_token() {
 
   getch;
   if (ch != '=') {
-    back_ch(0);
+    backleft;
   }
   return td;
 }
@@ -200,7 +202,7 @@ c_token comp_token() {
         getch;
         return TC_D_ADD_M;
       }
-      back_ch();
+      backch;
     }
     else if (ch == '-') {
       getch;
@@ -216,7 +218,7 @@ c_token comp_token() {
         getch;
         return TC_D_MINUS_M;
       }
-      back_ch();
+      backch;
     }
     else if (ch == '&') {
       getch;
@@ -228,7 +230,7 @@ c_token comp_token() {
         getch;
         return TC_D_AND_M;
       }
-      back_ch();
+      backch;
     }
     else if (ch == '|') {
       getch;
@@ -240,9 +242,9 @@ c_token comp_token() {
         getch;
         return TC_D_OR_M;
       }
-      back_ch();
+      backch;
     }
-    back_ch();
+    backch;
     return TC_D;
   }
   else if (ch == 'A') {
@@ -253,7 +255,7 @@ c_token comp_token() {
         getch;
         return TC_A_ADD_ONE;
       }
-      back_ch();
+      backch;
     }
     else if (ch == '-') {
       getch;
@@ -261,9 +263,9 @@ c_token comp_token() {
         getch;
         return TC_A_MINUS_D;
       }
-      back_ch();
+      backch;
     }
-    back_ch();
+    backch;
     return TC_A;
   }
   else if (ch == 'M') {
@@ -274,7 +276,7 @@ c_token comp_token() {
         getch;
         return TC_M_ADD_ONE;
       }
-      back_ch();
+      backch;
     }
     else if (ch == '-') {
       getch;
@@ -286,13 +288,13 @@ c_token comp_token() {
         getch;
         return TC_M_MINUS_D;
       }
-      back_ch();
+      backch;
     }
-    back_ch();
+    backch;
     return TC_M;
   }
 
-  back_ch();
+  backch;
   return -1;
 }
 
@@ -326,12 +328,6 @@ int get_ch() {
   }
   ch = line[j++];
   return 0;
-}
-
-// 回溯
-void back_ch(int n) {
-  if (n == 0) j = 0;
-  else if (j > 0) j--;
 }
 
 // 获取下一个token

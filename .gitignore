@@ -1,6 +1,7 @@
 # .vscode/*
 
 *.o
+*.exe
 ./out/
 ./out/test-vm
 main.dSYM/*

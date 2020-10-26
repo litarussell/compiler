@@ -10,8 +10,10 @@
 
 FILE* fin;
 
+void error(char *fmt, ...) __attribute__((noreturn));
+
 void parser();
 
-int add_entry(char*, int);
+// int add_entry(char*, int);
 
-int get_address(char*);
+// int get_address(char*);

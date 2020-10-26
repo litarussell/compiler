@@ -1,9 +1,10 @@
 #include "as.h"
 
 void error(char *fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
+  va_list args;
+  va_start(args, fmt);
+  vfprintf(stderr, fmt, args);
   fprintf(stderr, "\n");
+  va_end(args);
   exit(1);
 }

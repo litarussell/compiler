@@ -1,12 +1,23 @@
 # .vscode/*
 
+package-lock.json
+
 *.o
 *.exe
 ./out/
 ./out/test-vm
 main.dSYM/*
-./test/xc.c
-./test/hello.c
-./pl0/pl0
-./pl0/test.pl0
-./pl0/*.tmp
+node_modules
+
+out/*
+out/test-vm
+
+test/xc.c
+test/hello.c
+
+pl0/pl0
+pl0/test.pl0
+pl0/*.tmp
+
+hack/as/out/*
+hack/test/*

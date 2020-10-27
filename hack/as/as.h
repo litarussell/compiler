@@ -6,13 +6,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define maxsym 10  // 符号的最大长度
-
-FILE* fin;
-
 void error(char *fmt, ...) __attribute__((noreturn));
 
-void parser();
 
 // int add_entry(char*, int);
 

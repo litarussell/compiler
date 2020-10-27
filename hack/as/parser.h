@@ -1,4 +1,5 @@
-int get_ch();
-int next_line();
+#pragma once
 
-void back_ch(int);
+#include "lexer.h"
+
+void parser();
